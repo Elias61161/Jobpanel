@@ -1,267 +1,290 @@
 Config = {}
 
+-- ============================================
+-- GENERAL SETTINGS
+-- ============================================
+Config.DevName = 'Elias Developments'
+Config.DevLogo = 'https://i.imgur.com/your-logo.png' -- Din utvecklar-logo
+
+Config.RefreshInterval = 5000 -- Live update interval (ms)
 Config.Debug = false
 
+-- ============================================
+-- ACCESS METHODS
+-- ============================================
+Config.TabletItem = 'boss_tablet' -- Item name, or false to disable
+Config.Command = 'boss' -- Command, or false to disable
+Config.UseTarget = true -- ox_target/qb-target support
+Config.UseProximity = true -- Open when near location
+
+-- ============================================
+-- ANIMATION
+-- ============================================
+Config.Animation = {
+    enabled = true,
+    dict = 'amb@code_human_in_bus_passenger_idles@female@tablet@base',
+    anim = 'base',
+    prop = 'prop_cs_tablet',
+    bone = 60309,
+    offset = { x = 0.03, y = 0.002, z = -0.0 },
+    rotation = { x = 10.0, y = 160.0, z = 0.0 }
+}
+
+-- ============================================
+-- PERMISSION SYSTEM
+-- ============================================
+-- Alla tillgängliga behörigheter som kan tilldelas per rank
+Config.AllPermissions = {
+    { id = 'panel_access', label = 'Tillgång till Panel', icon = 'door-open', category = 'basic' },
+    { id = 'view_employees', label = 'Se Anställda', icon = 'users', category = 'basic' },
+    { id = 'view_finances', label = 'Se Ekonomi', icon = 'eye', category = 'finance' },
+    { id = 'view_grades', label = 'Se Ranks', icon = 'layer-group', category = 'basic' },
+    { id = 'view_audit', label = 'Se Revisionslogg', icon = 'clipboard-list', category = 'admin' },
+    { id = 'view_statistics', label = 'Se Statistik', icon = 'chart-line', category = 'admin' },
+    
+    { id = 'hire_fire', label = 'Anställa/Avskeda', icon = 'user-plus', category = 'hr' },
+    { id = 'manage_grades', label = 'Ändra Ranks', icon = 'user-cog', category = 'hr' },
+    { id = 'manage_notes', label = 'Hantera Anteckningar', icon = 'sticky-note', category = 'hr' },
+    { id = 'manage_individual_salary', label = 'Individuell Lön', icon = 'user-tag', category = 'finance' },
+    
+    { id = 'manage_salary', label = 'Betala Löner', icon = 'money-bill-wave', category = 'finance' },
+    { id = 'manage_finances', label = 'Ta ut Pengar', icon = 'hand-holding-usd', category = 'finance' },
+    { id = 'manage_grade_salary', label = 'Ändra Löneskalor', icon = 'sliders-h', category = 'admin' },
+    
+    { id = 'manage_permissions', label = 'Hantera Behörigheter', icon = 'shield-alt', category = 'admin' },
+    { id = 'manage_vehicles', label = 'Fordonshantering', icon = 'car', category = 'resources' },
+    { id = 'order_equipment', label = 'Beställa Utrustning', icon = 'box', category = 'resources' },
+}
+
+-- ============================================
+-- JOB CONFIGURATION
+-- ============================================
 Config.Jobs = {
     ['police'] = {
-        label = 'Polisen',
-        logo = 'https://r2.fivemanage.com/pN3z1DHpADRyEEFI0VgPv/kronal.png',
-
+        label = 'Los Santos Police Department',
+        shortLabel = 'LSPD',
+        logo = 'https://i.imgur.com/8FzsdCV.png',
+        banner = 'https://i.imgur.com/banner.png', -- Optional banner image
+        color = '#2563eb', -- Primary color
+        colorSecondary = '#1d4ed8', -- Secondary color
+        
+        -- Access location
         location = {
-            coords = vector3(-576.5494, -938.4461, 28.6956),
-            radius = 2.0,
-        },
-
-        marker = {
-            type = 27,
-            scale = vector3(1.0, 1.0, 0.5),
-            color = { r = 66, g = 135, b = 245, a = 150 },
-        },
-
-        licenses = {
             enabled = true,
+            coords = vector3(441.8465, -982.0898, 30.6896),
+            radius = 2.5,
+            label = 'Boss Panel'
         },
-
-        market = false,
+        
+        -- Marker settings
+        marker = {
+            enabled = true,
+            type = 27,
+            scale = vector3(1.0, 1.0, 0.5),
+            color = { r = 37, g = 99, b = 235, a = 180 },
+            bobUpAndDown = true
+        },
+        
+        -- Blip settings
+        blip = {
+            enabled = true,
+            sprite = 60,
+            color = 3,
+            scale = 0.8,
+            label = 'LSPD Station'
+        },
+        
+        -- Society account
+        society = 'society_police',
+        
+        -- Grade configuration with individual permissions
+        grades = {
+            [0] = { 
+                name = 'Kadet', 
+                defaultSalary = 2500,
+                canReceiveSalary = true,
+                permissions = { 
+                    'panel_access', 
+                    'view_employees' 
+                }
+            },
+            [1] = { 
+                name = 'Officer', 
+                defaultSalary = 3200,
+                canReceiveSalary = true,
+                permissions = { 
+                    'panel_access', 
+                    'view_employees', 
+                    'view_grades',
+                    'view_finances'
+                }
+            },
+            [2] = { 
+                name = 'Sergeant', 
+                defaultSalary = 4000,
+                canReceiveSalary = true,
+                permissions = { 
+                    'panel_access', 
+                    'view_employees', 
+                    'view_grades',
+                    'view_finances',
+                    'manage_notes',
+                    'hire_fire'
+                }
+            },
+            [3] = { 
+                name = 'Lieutenant', 
+                defaultSalary = 4800,
+                canReceiveSalary = true,
+                permissions = { 
+                    'panel_access', 
+                    'view_employees', 
+                    'view_grades',
+                    'view_finances',
+                    'view_audit',
+                    'manage_notes',
+                    'hire_fire',
+                    'manage_grades',
+                    'manage_salary'
+                }
+            },
+            [4] = { 
+                name = 'Captain', 
+                defaultSalary = 5500,
+                canReceiveSalary = true,
+                permissions = { 
+                    'panel_access', 
+                    'view_employees', 
+                    'view_grades',
+                    'view_finances',
+                    'view_audit',
+                    'view_statistics',
+                    'manage_notes',
+                    'hire_fire',
+                    'manage_grades',
+                    'manage_salary',
+                    'manage_finances',
+                    'manage_individual_salary',
+                    'manage_grade_salary'
+                }
+            },
+            [5] = { 
+                name = 'Chief of Police', 
+                defaultSalary = 7500,
+                canReceiveSalary = true,
+                permissions = { 
+                    'panel_access', 
+                    'view_employees', 
+                    'view_grades',
+                    'view_finances',
+                    'view_audit',
+                    'view_statistics',
+                    'manage_notes',
+                    'hire_fire',
+                    'manage_grades',
+                    'manage_salary',
+                    'manage_finances',
+                    'manage_individual_salary',
+                    'manage_grade_salary',
+                    'manage_permissions',
+                    'manage_vehicles',
+                    'order_equipment'
+                }
+            }
+        },
+        
+        -- Salary settings
+        salarySettings = {
+            minSalary = 1000,
+            maxSalary = 15000,
+            minBonus = 0,
+            maxBonus = 10000,
+            allowIndividualSalary = true
+        }
     },
-
+    
     ['ambulance'] = {
-        label = 'Sjukvården',
-        logo = 'https://r2.fivemanage.com/pN3z1DHpADRyEEFI0VgPv/ambulance.png',
-
+        label = 'Los Santos Medical Department',
+        shortLabel = 'LSMD',
+        logo = 'https://i.imgur.com/JxN9z0W.png',
+        color = '#dc2626',
+        colorSecondary = '#b91c1c',
+        
         location = {
-            coords = vector3(-661.4110, 310.0635, 92.7442),
-            radius = 2.0,
+            enabled = true,
+            coords = vector3(311.4851, -592.5918, 43.2840),
+            radius = 2.5,
+            label = 'Boss Panel'
         },
-
+        
         marker = {
+            enabled = true,
             type = 27,
             scale = vector3(1.0, 1.0, 0.5),
-            color = { r = 239, g = 68, b = 68, a = 150 },
+            color = { r = 220, g = 38, b = 38, a = 180 },
+            bobUpAndDown = true
         },
-
-        market = false,
-    },
-
-    ['trygghansa'] = {
-        label = 'Trygghansa',
-        logo = 'https://r2.fivemanage.com/pN3z1DHpADRyEEFI0VgPv/trygghansa.png',
-
-        location = {
-            coords = vector3(-1020.7328, -1376.8068, 5.5578),
-            radius = 2.0,
+        
+        blip = {
+            enabled = true,
+            sprite = 61,
+            color = 1,
+            scale = 0.8,
+            label = 'Pillbox Hospital'
         },
-
-        marker = {
-            type = 27,
-            scale = vector3(1.0, 1.0, 0.5),
-            color = { r = 239, g = 68, b = 68, a = 150 },
+        
+        society = 'society_ambulance',
+        
+        grades = {
+            [0] = { 
+                name = 'Trainee', 
+                defaultSalary = 2000,
+                canReceiveSalary = true,
+                permissions = { 'panel_access', 'view_employees' }
+            },
+            [1] = { 
+                name = 'EMT', 
+                defaultSalary = 2800,
+                canReceiveSalary = true,
+                permissions = { 'panel_access', 'view_employees', 'view_grades', 'view_finances' }
+            },
+            [2] = { 
+                name = 'Paramedic', 
+                defaultSalary = 3500,
+                canReceiveSalary = true,
+                permissions = { 'panel_access', 'view_employees', 'view_grades', 'view_finances', 'manage_notes' }
+            },
+            [3] = { 
+                name = 'Doctor', 
+                defaultSalary = 4500,
+                canReceiveSalary = true,
+                permissions = { 'panel_access', 'view_employees', 'view_grades', 'view_finances', 'view_audit', 'manage_notes', 'hire_fire', 'manage_grades', 'manage_salary' }
+            },
+            [4] = { 
+                name = 'Chief of Medicine', 
+                defaultSalary = 6500,
+                canReceiveSalary = true,
+                permissions = { 'panel_access', 'view_employees', 'view_grades', 'view_finances', 'view_audit', 'view_statistics', 'manage_notes', 'hire_fire', 'manage_grades', 'manage_salary', 'manage_finances', 'manage_individual_salary', 'manage_grade_salary', 'manage_permissions' }
+            }
         },
-
-        market = false,
-    },
-
-    ['bennys'] = {
-        label = 'Bennys',
-        logo = 'https://r2.fivemanage.com/pN3z1DHpADRyEEFI0VgPv/bennys.png',
-
-        location = {
-            coords = vector3(-197.5506, -1361.9559, 30.5901),
-            radius = 2.0,
-        },
-
-        marker = {
-            type = 27,
-            scale = vector3(1.0, 1.0, 0.5),
-            color = { r = 239, g = 68, b = 68, a = 150 },
-        },
-
-        market = false,
-    },
-
-    ['cardealer'] = {
-        label = 'Premium Deluxe',
-        logo = 'https://r2.fivemanage.com/pN3z1DHpADRyEEFI0VgPv/pdm.png',
-
-        location = {
-            coords = vector3(148.3198, -141.8414, 54.8001),
-            radius = 2.0,
-        },
-
-        marker = {
-            type = 27,
-            scale = vector3(1.0, 1.0, 0.5),
-            color = { r = 239, g = 68, b = 68, a = 150 },
-        },
-
-        market = false,
-    },
-
-    ['moore'] = {
-        label = 'Moore Club',
-        logo = 'https://r2.fivemanage.com/pN3z1DHpADRyEEFI0VgPv/moore.png',
-
-        location = {
-            coords = vector3(129.0687, -1283.3367, 29.2735),
-            radius = 2.0,
-        },
-
-        marker = {
-            type = 27,
-            scale = vector3(1.0, 1.0, 0.5),
-            color = { r = 239, g = 68, b = 68, a = 150 },
-        },
-
-        market = false,
-    },
-
-    ['qpark'] = {
-        label = 'QPark',
-        logo = 'https://r2.fivemanage.com/pN3z1DHpADRyEEFI0VgPv/qpark.png',
-
-        location = {
-            coords = vector3(227.2247, 378.5436, 106.1143),
-            radius = 2.0,
-        },
-
-        marker = {
-            type = 27,
-            scale = vector3(1.0, 1.0, 0.5),
-            color = { r = 239, g = 68, b = 68, a = 150 },
-        },
-
-        market = false,
-    },
-
-    ['scstyling'] = {
-        label = 'SC Styling',
-        logo = 'https://r2.fivemanage.com/pN3z1DHpADRyEEFI0VgPv/scstylingh.png',
-
-        location = {
-            coords = vector3(126.0558, -3007.9099, 7.0409),
-            radius = 2.0,
-        },
-
-        marker = {
-            type = 27,
-            scale = vector3(1.0, 1.0, 0.5),
-            color = { r = 239, g = 68, b = 68, a = 150 },
-        },
-
-        market = false,
-    },
-
-    ['mekonomen'] = {
-        label = 'mekonomen',
-        logo = 'https://r2.fivemanage.com/pN3z1DHpADRyEEFI0VgPv/images-removebg-preview.png',
-
-        location = {
-            coords = vector3(-929.0052, -2029.3982, 9.5045),
-            radius = 2.0,
-        },
-
-        marker = {
-            type = 27,
-            scale = vector3(1.0, 1.0, 0.5),
-            color = { r = 239, g = 68, b = 68, a = 150 },
-        },
-
-        market = false,
-    },
-
-    -- Template:
-    -- ['jobname'] = {
-    --     label = 'Namn',
-    --     logo = 'logo url',
-    --     location = {
-    --         coords = vector3(0.0, 0.0, 0.0),
-    --         radius = 2.0,
-    --     },
-    --     marker = {
-    --         type = 27,
-    --         scale = vector3(1.0, 1.0, 0.5),
-    --         color = { r = 66, g = 135, b = 245, a = 150 },
-    --     },
-    --     licenses = {
-    --         enabled = true,
-    --     },
-        -- market = {
-        --     categories = {
-        --         { id = 'weapons', label = 'Vapen' },
-        --     },
-        --     items = {
-        --         { spawnName = 'WEAPON_PISTOL', label = 'Pistol', description = 'Standard tjänstevapen', price = 2500, category = 'weapons', image = 'https://docs.fivem.net/weapons/WEAPON_PISTOL.png' },
-        --         { spawnName = 'WEAPON_STUNGUN', label = 'Elpistol', description = 'Icke dödligt alternativ', price = 1500, category = 'weapons', image = 'https://docs.fivem.net/weapons/WEAPON_STUNGUN.png' },
-        --     },
-        -- },
-    -- },
-}
-
-Config.KeyToOpen = 38
-
-Config.MinSalary = 1000
-Config.MaxSalary = 5500
-
-Config.BossGradeName = 'boss'
-
-Config.AllPermissions = {
-    'panel_access',
-    'view_employees',
-    'manage_grades',
-    'manage_notes',
-    'manage_tags',
-    'manage_licenses',
-    'manage_permissions',
-    'hire_fire',
-    'view_grades',
-    'manage_salary',
-    'view_finances',
-    'manage_finances',
-    'view_audit',
-    'view_statistics',
-    'order_equipment',
-}
-
-function Config.HasAccess(jobName)
-    return jobName ~= nil and jobName ~= '' and jobName ~= 'unemployed'
-end
-
-function Config.IsBossGrade(gradeName)
-    return gradeName and string.lower(gradeName) == string.lower(Config.BossGradeName)
-end
-
-function Config.GetJobConfig(jobName)
-    local jobConfig = Config.Jobs[jobName]
-    if jobConfig then
-        return jobConfig
-    end
-
-    return {
-        label = jobName:gsub("^%l", string.upper),
-        logo = nil,
-        location = nil,
-        marker = nil,
-        market = nil,
+        
+        salarySettings = {
+            minSalary = 1000,
+            maxSalary = 12000,
+            minBonus = 0,
+            maxBonus = 8000,
+            allowIndividualSalary = true
+        }
     }
-end
+}
 
-function Config.GetJobLocation(jobName)
-    local jobConfig = Config.Jobs[jobName]
-    if jobConfig and jobConfig.location then
-        return jobConfig.location, jobConfig.marker
-    end
-    return nil, nil
-end
-
-function Config.GetJobMarket(jobName)
-    local jobConfig = Config.Jobs[jobName]
-    if jobConfig and jobConfig.market then
-        return jobConfig.market
-    end
-    return nil
-end
-
-function Config.HasLicensesEnabled(jobName)
-    local jobConfig = Config.Jobs[jobName]
-    return jobConfig and jobConfig.licenses and jobConfig.licenses.enabled == true
-end
+-- ============================================
+-- WEBHOOKS (Discord Logging)
+-- ============================================
+Config.Webhooks = {
+    enabled = true,
+    salary = '', -- Webhook for salary payments
+    hiring = '', -- Webhook for hire/fire
+    finances = '', -- Webhook for deposits/withdrawals
+    audit = '' -- General audit log
+}

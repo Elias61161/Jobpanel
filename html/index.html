@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boss Panel</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container" id="app">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="top-left">
+                <div class="dev-brand">
+                    <span id="devName">Elias Developments</span>
+                </div>
+            </div>
+            <div class="top-center">
+                <div class="job-title">
+                    <img src="" alt="" id="jobLogo" class="job-logo">
+                    <div class="job-info">
+                        <h1 id="jobLabel">Organization</h1>
+                        <span id="jobShort">ORG</span>
+                    </div>
+                </div>
+            </div>
+            <div class="top-right">
+                <div class="user-info">
+                    <div class="user-details">
+                        <span class="user-name" id="userName">User</span>
+                        <span class="user-rank" id="userRank">Rank</span>
+                    </div>
+                    <div class="user-avatar" id="userAvatar">US</div>
+                </div>
+                <div class="top-actions">
+                    <button class="icon-btn" onclick="requestRefresh()" title="Uppdatera">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <button class="icon-btn close" onclick="closePanel()" title="Stäng">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-wrapper">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-balance">
+                    <div class="balance-card">
+                        <div class="balance-icon">
+                            <i class="fas fa-vault"></i>
+                        </div>
+                        <div class="balance-content">
+                            <span class="balance-label">Företagskassa</span>
+                            <span class="balance-value" id="sidebarBalance">$0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <div class="nav-group">
+                        <span class="nav-group-label">Översikt</span>
+                        <button class="nav-btn active" data-page="dashboard">
+                            <i class="fas fa-th-large"></i>
+                            <span>Dashboard</span>
+                        </button>
+                        <button class="nav-btn" data-page="employees" data-perm="view_employees">
+                            <i class="fas fa-users"></i>
+                            <span>Personal</span>
+                            <span class="nav-count" id="navEmployeeCount">0</span>
+                        </button>
+                    </div>
+
+                    <div class="nav-group">
+                        <span class="nav-group-label">Ekonomi</span>
+                        <button class="nav-btn" data-page="payroll" data-perm="manage_salary">
+                            <i class="fas fa-money-check-alt"></i>
+                            <span>Lönehantering</span>
+                        </button>
+                        <button class="nav-btn" data-page="finances" data-perm="view_finances">
+                            <i class="fas fa-landmark"></i>
+                            <span>Ekonomi</span>
+                        </button>
+                    </div>
+
+                    <div class="nav-group">
+                        <span class="nav-group-label">Hantering</span>
+                        <button class="nav-btn" data-page="recruitment" data-perm="hire_fire">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Rekrytering</span>
+                        </button>
+                        <button class="nav-btn" data-page="grades" data-perm="manage_grade_salary">
+                            <i class="fas fa-sliders-h"></i>
+                            <span>Löneskalor</span>
+                        </button>
+                        <button class="nav-btn" data-page="permissions" data-perm="manage_permissions">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Behörigheter</span>
+                        </button>
+                    </div>
+
+                    <div class="nav-group">
+                        <span class="nav-group-label">System</span>
+                        <button class="nav-btn" data-page="statistics" data-perm="view_statistics">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Statistik</span>
+                        </button>
+                        <button class="nav-btn" data-page="audit" data-perm="view_audit">
+                            <i class="fas fa-history"></i>
+                            <span>Aktivitetslogg</span>
+                        </button>
+                    </div>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <div class="live-status">
+                        <span class="live-dot"></span>
+                        <span>Live Sync</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Dashboard -->
+                <section class="page active" id="dashboard">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Dashboard</h2>
+                            <p>Översikt över din organisation</p>
+                        </div>
+                    </div>
+
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <div class="stat-icon blue"><i class="fas fa-users"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="statTotal">0</span>
+                                <span class="stat-label">Anställda</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green"><i class="fas fa-user-check"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="statOnline">0</span>
+                                <span class="stat-label">Online</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon orange"><i class="fas fa-coins"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="statSalaryCost">$0</span>
+                                <span class="stat-label">Lönekostnad</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon purple"><i class="fas fa-vault"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="statVault">$0</span>
+                                <span class="stat-label">I Kassan</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="widget">
+                            <div class="widget-header">
+                                <h3><i class="fas fa-clock"></i> Senaste Aktivitet</h3>
+                            </div>
+                            <div class="widget-body" id="recentActivity">
+                                <div class="empty-state small">
+                                    <i class="fas fa-inbox"></i>
+                                    <p>Ingen aktivitet ännu</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget">
+                            <div class="widget-header">
+                                <h3><i class="fas fa-signal"></i> Online Personal</h3>
+                            </div>
+                            <div class="widget-body" id="onlineStaff">
+                                <div class="empty-state small">
+                                    <i class="fas fa-user-slash"></i>
+                                    <p>Ingen online</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Employees -->
+                <section class="page" id="employees">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Personal</h2>
+                            <p>Hantera alla anställda</p>
+                        </div>
+                        <div class="page-actions">
+                            <div class="search-input">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="employeeSearch" placeholder="Sök personal...">
+                            </div>
+                            <select id="employeeFilter" class="filter-select">
+                                <option value="all">Alla</option>
+                                <option value="online">Online</option>
+                                <option value="offline">Offline</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="employee-grid" id="employeeGrid"></div>
+                </section>
+
+                <!-- Payroll -->
+                <section class="page" id="payroll">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Lönehantering</h2>
+                            <p>Betala ut löner till anställda</p>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" onclick="openPayAllModal()" id="payAllBtn">
+                                <i class="fas fa-hand-holding-usd"></i> Betala Alla
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="payroll-summary">
+                        <div class="summary-card">
+                            <span class="sc-label">Online Anställda</span>
+                            <span class="sc-value" id="payrollOnline">0</span>
+                        </div>
+                        <div class="summary-card">
+                            <span class="sc-label">Total Lönekostnad</span>
+                            <span class="sc-value green" id="payrollCost">$0</span>
+                        </div>
+                        <div class="summary-card">
+                            <span class="sc-label">Tillgängligt</span>
+                            <span class="sc-value" id="payrollAvailable">$0</span>
+                        </div>
+                    </div>
+
+                    <div class="payroll-list" id="payrollList"></div>
+                </section>
+
+                <!-- Finances -->
+                <section class="page" id="finances">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Ekonomi</h2>
+                            <p>Hantera organisationens ekonomi</p>
+                        </div>
+                    </div>
+
+                    <div class="finance-hero">
+                        <div class="fh-icon"><i class="fas fa-building"></i></div>
+                        <div class="fh-content">
+                            <span class="fh-label">Totalt i Kassan</span>
+                            <span class="fh-value" id="financeBalance">$0</span>
+                        </div>
+                    </div>
+
+                    <div class="finance-grid">
+                        <div class="finance-card">
+                            <div class="fc-header">
+                                <i class="fas fa-arrow-down"></i>
+                                <h3>Sätt In Pengar</h3>
+                            </div>
+                            <div class="money-type-grid">
+                                <button class="money-type active" data-type="cash" onclick="setMoneyType(this, 'deposit')">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <span>Kontanter</span>
+                                    <small id="playerCash">$0</small>
+                                </button>
+                                <button class="money-type" data-type="bank" onclick="setMoneyType(this, 'deposit')">
+                                    <i class="fas fa-university"></i>
+                                    <span>Bank</span>
+                                    <small id="playerBank">$0</small>
+                                </button>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-prefix">$</span>
+                                <input type="number" id="depositAmount" placeholder="0">
+                            </div>
+                            <button class="btn btn-success btn-block" onclick="doDeposit()">
+                                <i class="fas fa-plus"></i> Sätt In
+                            </button>
+                        </div>
+
+                        <div class="finance-card" id="withdrawSection">
+                            <div class="fc-header">
+                                <i class="fas fa-arrow-up"></i>
+                                <h3>Ta Ut Pengar</h3>
+                            </div>
+                            <div class="money-type-grid">
+                                <button class="money-type active" data-type="cash" onclick="setMoneyType(this, 'withdraw')">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <span>Kontanter</span>
+                                </button>
+                                <button class="money-type" data-type="bank" onclick="setMoneyType(this, 'withdraw')">
+                                    <i class="fas fa-university"></i>
+                                    <span>Bank</span>
+                                </button>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-prefix">$</span>
+                                <input type="number" id="withdrawAmount" placeholder="0">
+                            </div>
+                            <button class="btn btn-danger btn-block" onclick="doWithdraw()">
+                                <i class="fas fa-minus"></i> Ta Ut
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="transactions-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-exchange-alt"></i> Transaktionshistorik</h3>
+                        </div>
+                        <div class="transactions-list" id="transactionsList"></div>
+                    </div>
+                </section>
+
+                <!-- Recruitment -->
+                <section class="page" id="recruitment">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Rekrytering</h2>
+                            <p>Anställ nya medarbetare</p>
+                        </div>
+                    </div>
+
+                    <div class="recruit-content">
+                        <div class="info-banner">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <strong>Hitta kandidater</strong>
+                                <p>Klicka på knappen nedan för att söka efter spelare i närheten.</p>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-lg" onclick="searchNearby()">
+                            <i class="fas fa-search-location"></i> Sök Spelare i Närheten
+                        </button>
+                        <div class="nearby-results" id="nearbyResults"></div>
+                    </div>
+                </section>
+
+                <!-- Grades / Salary Scales -->
+                <section class="page" id="grades">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Löneskalor</h2>
+                            <p>Konfigurera löner för varje rank</p>
+                        </div>
+                    </div>
+
+                    <div class="info-banner warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>
+                            <strong>Viktigt</strong>
+                            <p>Ändringar påverkar alla anställda med den ranken. Individuella löner påverkas ej.</p>
+                        </div>
+                    </div>
+
+                    <div class="grades-list" id="gradesList"></div>
+                </section>
+
+                <!-- Permissions -->
+                <section class="page" id="permissions">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Behörigheter</h2>
+                            <p>Hantera behörigheter för varje rank</p>
+                        </div>
+                    </div>
+
+                    <div class="permissions-grid" id="permissionsGrid"></div>
+                </section>
+
+                <!-- Statistics -->
+                <section class="page" id="statistics">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Statistik</h2>
+                            <p>Översikt över organisationens prestanda</p>
+                        </div>
+                    </div>
+
+                    <div class="stats-overview">
+                        <div class="so-card">
+                            <div class="so-icon green"><i class="fas fa-hand-holding-usd"></i></div>
+                            <div class="so-content">
+                                <span class="so-value" id="statTotalPaid">$0</span>
+                                <span class="so-label">Totalt Utbetalt</span>
+                            </div>
+                        </div>
+                        <div class="so-card">
+                            <div class="so-icon blue"><i class="fas fa-calendar-week"></i></div>
+                            <div class="so-content">
+                                <span class="so-value" id="statWeeklyPayments">0</span>
+                                <span class="so-label">Betalningar (7 dagar)</span>
+                            </div>
+                        </div>
+                        <div class="so-card">
+                            <div class="so-icon purple"><i class="fas fa-arrow-down"></i></div>
+                            <div class="so-content">
+                                <span class="so-value" id="statTotalDeposits">$0</span>
+                                <span class="so-label">Totalt Insatt</span>
+                            </div>
+                        </div>
+                        <div class="so-card">
+                            <div class="so-icon orange"><i class="fas fa-arrow-up"></i></div>
+                            <div class="so-content">
+                                <span class="so-value" id="statTotalWithdrawals">$0</span>
+                                <span class="so-label">Totalt Uttaget</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Audit Log -->
+                <section class="page" id="audit">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Aktivitetslogg</h2>
+                            <p>Spåra alla händelser i systemet</p>
+                        </div>
+                    </div>
+                    <div class="audit-list" id="auditList"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="modalTitle">Modal</h3>
+                <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

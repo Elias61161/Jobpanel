@@ -1,59 +1,30 @@
-shared_script '@WaveShield/resource/include.lua'
-
-shared_script '@ibrp_menu/shared_fg-obfuscated.lua'
-shared_script '@ibrp_menu/ai_module_fg-obfuscated.lua'
-
 fx_version 'cerulean'
 game 'gta5'
 
-name 'Elias Jobapenl'
-author 'Elias'
+author 'Elias Developments'
+description 'Ultimate Boss Panel - Professional Management System'
+version '5.0.0'
 
-lua54 'yes'
+ui_page 'html/index.html'
 
 shared_scripts {
-    '@ox_lib/init.lua',
-    'config.lua',
+    '@es_extended/imports.lua',
+    'config.lua'
 }
 
 client_scripts {
-    'client/modules/utils.lua',
-    'client/modules/callbacks.lua',
-    'client/main.lua',
+    'client/client.lua'
 }
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
-    'server/config.lua',
-    'server/modules/utils.lua',
-    'server/modules/permissions.lua',
-    'server/modules/audit.lua',
-    'server/modules/cache.lua',
-    'server/modules/session.lua',
-    'server/modules/employees.lua',
-    'server/modules/finances.lua',
-    'server/modules/shifts.lua',
-    'server/modules/statistics.lua',
-    'server/modules/discord.lua',
-    'server/main.lua',
+    'server/server.lua'
 }
-
-ui_page 'web/dist/index.html'
 
 files {
-    'web/dist/index.html',
-    'web/dist/**/*',
+    'html/index.html',
+    'html/style.css',
+    'html/script.js'
 }
 
-dependencies {
-    'es_extended',
-    'ox_lib',
-    'oxmysql',
-}
-
-escrow_ignore {
-    'config.lua',
-    'server/config.lua',
-}
-
-dependency '/assetpacks'
+lua54 'yes'
